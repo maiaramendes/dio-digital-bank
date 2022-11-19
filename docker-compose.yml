@@ -1,0 +1,21 @@
+version: "3.2"
+
+services:
+  mongo:
+    image: mongo:4.4.6
+    container_name: mongo-dio
+    hostname: mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=dio
+      - MONGO_INITDB_ROOT_PASSWORD=dio
+      - MONGO_INITDB_DATABASE=digital-bank
+      - MONGO_DB_USERNAME=dio
+      - MONGO_DB_PASSWORD=Dio!digit@lB@nk
+    volumes:
+      - ~/mongo:/data/db
+
+volumes:
+  mongo-alura-challenge:

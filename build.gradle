@@ -1,0 +1,71 @@
+plugins {
+	id "java"
+	id 'application'
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+
+group = "br"
+version = "0.0.1-SNAPSHOT"
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+	maven {
+		url "https://plugins.gradle.org/m2/"
+	}
+}
+
+dependencies {
+	implementation("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
+	implementation("org.hibernate:hibernate-core:${hibernateCoreVersion}")
+	implementation("org.springframework.boot:spring-boot-starter-data-mongodb:${mongodbVersion}")
+	implementation("com.google.guava:guava:${guavaVersion}")
+	implementation("org.springframework.boot:spring-boot-starter-validation:2.5.6")
+	implementation("javax.validation:validation-api:2.0.1.Final")
+	implementation("org.springframework.boot:spring-boot-starter-parent:${springBootVersion}")
+	implementation("org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}")
+	implementation("org.projectlombok:lombok:${lombokVersion}")
+	implementation("org.projectlombok:lombok-mapstruct-binding:${lombokMapstruct}")
+	implementation("io.springfox:springfox-swagger2:${swaggerVersion}")
+	implementation("io.springfox:springfox-swagger-ui:${swaggerVersion}")
+	implementation("org.mapstruct:mapstruct:${mapstructVersion}")
+
+	annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+	annotationProcessor("org.mapstruct:mapstruct-processor:${mapstructVersion}")
+
+	runtimeOnly("org.springframework.boot:spring-boot-devtools:${springBootVersion}")
+
+	testImplementation("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
+	testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
+	testImplementation("org.mockito:mockito-core:${mockitoVersion}")
+	testImplementation("org.mockito:mockito-junit-jupiter:${mockitoVersion}")
+}
+
+ext {
+	javaMainClass = "br.digitalbank.DioDigitalBankApplication"
+}
+
+test {
+	useJUnitPlatform()
+}
+
+application {
+	mainClassName = javaMainClass
+}
+
+tasks.withType(JavaCompile) {
+	options.compilerArgs += [
+			'-Amapstruct.suppressGeneratorTimestamp=true',
+			'-Amapstruct.defaultComponentModel=spring'
+	]
+}
+
