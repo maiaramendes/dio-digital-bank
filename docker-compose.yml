@@ -16,6 +16,3 @@ services:
       - MONGO_DB_PASSWORD=Dio!digit@lB@nk
     volumes:
       - ~/mongo:/data/db
-
-volumes:
-  mongo-alura-challenge:
