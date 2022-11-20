@@ -9,5 +9,6 @@ public class DioDigitalBankApplication {
     public static void main(String[] args) {
         SpringApplication.run(DioDigitalBankApplication.class, args);
     }
+
 }
 
