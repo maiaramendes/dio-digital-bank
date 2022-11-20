@@ -21,7 +21,7 @@ docker compose up
 
 #### 4. Run the project
 ```bash
-./gradlew :bootRun
+./gradlew :run
 ```
 
 ## Database keys
@@ -29,8 +29,6 @@ docker compose up
 |-----------------|--------------|----------|-----------------|
 | localhost:27017 | digital-bank | dio      | Dio!digit@lB@nk |
 
-## Swagger
-`http://localhost:8080/swagger-ui.html`
 
 ## Stack
 - [Java 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
