@@ -1,7 +1,6 @@
-package br.digitalbank.handlers;
+package br.digitalbank.handlers.transaction;
 
 import br.digitalbank.enums.TransactionType;
-import br.digitalbank.exceptions.AccountNotFoundException;
 import br.digitalbank.model.Account;
 import br.digitalbank.model.Transaction;
 import br.digitalbank.repository.AccountRepository;
@@ -9,28 +8,16 @@ import br.digitalbank.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
-public class TransferHandler implements ServiceHandler {
+public class DepositHandler implements TransactionHandler {
 
     private final AccountRepository accountRepository;
 
     private final TransactionRepository transactionRepository;
 
     @Override
-    public void action(final Account account, final Double amount, final Double actualBalance, final Long accountNumber) {
-        final Optional<Account> recipient = accountRepository.findAccountByNumber(accountNumber);
-
-        if (recipient.isEmpty()) {
-            throw new AccountNotFoundException(accountNumber);
-        }
-
-        TransactionType.DEPOSIT.operation(recipient.get(), amount);
-        accountRepository.save(recipient.get());
-
+    public void action(final Account account, final Double amount, final Double actualBalance) {
         type().operation(account, amount);
         accountRepository.save(account);
 
@@ -38,9 +25,9 @@ public class TransferHandler implements ServiceHandler {
                 .builder()
                 .lastBalance(actualBalance)
                 .amount(amount)
-                .type(type())
+                .recipient(account)
                 .sender(account)
-                .recipient(recipient.get())
+                .type(type())
                 .build();
 
         transactionRepository.save(transaction);
@@ -48,6 +35,7 @@ public class TransferHandler implements ServiceHandler {
 
     @Override
     public TransactionType type() {
-        return TransactionType.TRANSFER;
+        return TransactionType.DEPOSIT;
     }
+
 }

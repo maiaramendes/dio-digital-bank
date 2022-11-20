@@ -1,7 +1,6 @@
-package br.digitalbank.handlers;
+package br.digitalbank.handlers.transaction;
 
 import br.digitalbank.enums.TransactionType;
-import br.digitalbank.exceptions.AccountNotFoundException;
 import br.digitalbank.model.Account;
 import br.digitalbank.model.Transaction;
 import br.digitalbank.repository.AccountRepository;
@@ -9,26 +8,20 @@ import br.digitalbank.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
-public class WithdrawHandler implements ServiceHandler {
+public class WithdrawHandler implements TransactionHandler {
 
     private final AccountRepository accountRepository;
 
     private final TransactionRepository transactionRepository;
 
     @Override
-    public void action(final Account account, final Double amount, final Double actualBalance, final Long accountNumber) {
-        final Optional<Account> recipient = accountRepository.findAccountByNumber(accountNumber);
-
-        if (recipient.isEmpty()) {
-            throw new AccountNotFoundException(accountNumber);
+    public void action(final Account account, final Double amount, final Double actualBalance) {
+        if (amount > actualBalance) {
+            System.out.print("Saldo insuficiente.");
+            return;
         }
-
-        TransactionType.DEPOSIT.operation(recipient.get(), amount);
-        accountRepository.save(recipient.get());
 
         type().operation(account, amount);
         accountRepository.save(account);
@@ -39,7 +32,7 @@ public class WithdrawHandler implements ServiceHandler {
                 .amount(amount)
                 .type(type())
                 .sender(account)
-                .recipient(recipient.get())
+                .recipient(account)
                 .build();
 
         transactionRepository.save(transaction);

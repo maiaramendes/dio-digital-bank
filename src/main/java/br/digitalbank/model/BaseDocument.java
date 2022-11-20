@@ -1,5 +1,6 @@
 package br.digitalbank.model;
 
+import br.digitalbank.utils.Utils;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -16,9 +17,10 @@ public class BaseDocument {
     private String id;
 
     @CreatedDate
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
 
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
+    public String createdAtFormatted() {
+        return Utils.formatDate(createdAt);
+    }
 
 }

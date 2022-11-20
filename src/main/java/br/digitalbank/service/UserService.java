@@ -7,9 +7,9 @@ import br.digitalbank.model.Account;
 import br.digitalbank.model.User;
 import br.digitalbank.repository.AccountRepository;
 import br.digitalbank.repository.UserRepository;
+import br.digitalbank.utils.Utils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -26,9 +26,9 @@ public class UserService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     public Account create(final String name, final String cpf, final String password) {
-        final boolean userAlreadyExists = userRepository.findUserByCpfOrName(cpf, name);
+        final Optional<User> userAlreadyExists = userRepository.findUserByCpf(cpf);
 
-        if (userAlreadyExists) {
+        if (userAlreadyExists.isPresent()) {
             throw new UserAlreadyExistsException();
         }
 
@@ -40,18 +40,21 @@ public class UserService {
                 .build();
 
         userRepository.save(user);
-        System.out.print(user.getId());
 
         final Account account = new Account()
                 .builder()
-                .number(new Random().nextLong())
+                .number(Utils.generateAccountNumber())
                 .balance(0.00)
                 .user(user)
                 .build();
 
         accountRepository.save(account);
-        System.out.print(account.getId());
         return account;
+    }
+
+    public User findUserByCpfOrThrow(final String cpf) {
+        return userRepository.findByCpf(cpf)
+                .orElseThrow(AccountNotFoundException::new);
     }
 
     public Account login(final String cpf, final String password) {

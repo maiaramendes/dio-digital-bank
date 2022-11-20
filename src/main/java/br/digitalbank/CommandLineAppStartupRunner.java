@@ -1,6 +1,6 @@
 package br.digitalbank;
 
-import br.digitalbank.service.HelloService;
+import br.digitalbank.service.StartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -9,10 +9,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class CommandLineAppStartupRunner implements CommandLineRunner {
 
-    private final HelloService helloService;
+    private final StartService startService;
 
     @Override
     public void run(String...args) {
-        helloService.hello();
+        startService.start();
     }
 }

@@ -6,6 +6,9 @@ server:
 spring:
   application:
     name: dio-digital-bank
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/digital-bank
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher

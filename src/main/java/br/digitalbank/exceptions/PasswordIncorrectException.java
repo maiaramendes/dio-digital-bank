@@ -8,6 +8,6 @@ public class PasswordIncorrectException extends RuntimeException {
 
     @Override
     public String getMessage() {
-        return "Credential is incorret.";
+        return "Senha incorreta.";
     }
 }

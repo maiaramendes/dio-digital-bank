@@ -26,4 +26,11 @@ public class Transaction extends BaseDocument {
 
     @DBRef(lazy = true)
     private Account recipient;
+
+    public String build(final Transaction transaction, final Account account) {
+        final String message = type.message(transaction, account);
+        System.out.println(message);
+        return message;
+    }
+
 }
